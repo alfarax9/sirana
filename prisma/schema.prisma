@@ -1,0 +1,41 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Report {
+  id            String   @id @default(cuid())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  lokasi        String
+  jenisBencana  String
+  deskripsi     String
+  fotoUrl       String?
+  sumber        String?  // "webform" | "chat"
+  lat           Float?
+  lng           Float?
+  duplicateOfId String?
+  duplicateOf   Report?  @relation("DupRel", fields: [duplicateOfId], references: [id])
+  reporters     Int      @default(1)
+  
+  @@relation("DupRel")
+  @@map("reports")
+}
+
+model RegulationDoc {
+  id        String   @id @default(cuid())
+  title     String
+  category  String   
+  excerpt   String?
+  url       String?
+  content   String?
+  createdAt DateTime @default(now())
+  
+  @@map("regulation_docs")
+}
