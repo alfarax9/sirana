@@ -36,9 +36,6 @@ export default function RealtimeMap({
     return () => clearInterval(interval);
   }, []);
 
-  // Mock Indonesia center coordinates
-  const centerLat = -2.5489;
-  const centerLng = 118.0149;
 
   const handleMarkerClick = (report: Report) => {
     setSelectedReport(report);

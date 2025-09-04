@@ -2,53 +2,51 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { calculateDistance } from '@/lib/utils';
 
-// Mock data untuk fallback jika database tidak tersedia
-const mockReports = [
-  {
-    id: '1',
-    lokasi: 'Jakarta Pusat',
-    jenisBencana: 'Banjir',
-    deskripsi: 'Banjir setinggi 1 meter di Jalan Sudirman',
-    lat: -6.2088,
-    lng: 106.8456,
-    reporters: 3,
-    createdAt: new Date(),
-  },
-  {
-    id: '2',
-    lokasi: 'Bandung Selatan',
-    jenisBencana: 'Longsor',
-    deskripsi: 'Longsor tutup akses jalan di Dago',
-    lat: -6.9175,
-    lng: 107.6191,
-    reporters: 1,
-    createdAt: new Date(),
-  },
-  {
-    id: '3',
-    lokasi: 'Surabaya Timur',
-    jenisBencana: 'Angin Puting Beliung',
-    deskripsi: 'Angin kencang robohkan pohon dan atap rumah',
-    lat: -7.2575,
-    lng: 112.7521,
-    reporters: 2,
-    createdAt: new Date(),
-  },
-];
+// // Mock data untuk fallback jika database tidak tersedia
+// const mockReports = [
+//   {
+//     id: '1',
+//     lokasi: 'Jakarta Pusat',
+//     jenisBencana: 'Banjir',
+//     deskripsi: 'Banjir setinggi 1 meter di Jalan Sudirman',
+//     lat: -6.2088,
+//     lng: 106.8456,
+//     reporters: 3,
+//     createdAt: new Date(),
+//   },
+//   {
+//     id: '2',
+//     lokasi: 'Bandung Selatan',
+//     jenisBencana: 'Longsor',
+//     deskripsi: 'Longsor tutup akses jalan di Dago',
+//     lat: -6.9175,
+//     lng: 107.6191,
+//     reporters: 1,
+//     createdAt: new Date(),
+//   },
+//   {
+//     id: '3',
+//     lokasi: 'Surabaya Timur',
+//     jenisBencana: 'Angin Puting Beliung',
+//     deskripsi: 'Angin kencang robohkan pohon dan atap rumah',
+//     lat: -7.2575,
+//     lng: 112.7521,
+//     reporters: 2,
+//     createdAt: new Date(),
+//   },
+// ];
 
 export async function GET() {
   try {
     // Coba ambil data dari database
-    const reports = await prisma.report.findMany({
-      orderBy: { createdAt: 'desc' },
+    const reports = await prisma.emergency_reports.findMany({
+      orderBy: { created_at: 'desc' },
       take: 100, // Limit untuk performa
     });
 
     return NextResponse.json(reports);
   } catch (error) {
     console.error('Database error, using mock data:', error);
-    // Fallback ke mock data jika database tidak tersedia
-    return NextResponse.json(mockReports);
   }
 }
 
@@ -70,56 +68,25 @@ export async function POST(request: NextRequest) {
     oneDayAgo.setHours(oneDayAgo.getHours() - 24);
 
     try {
-      const existingReports = await prisma.report.findMany({
+      const existingReports = await prisma.emergency_reports.findMany({
         where: {
-          jenisBencana,
-          createdAt: {
+          emergency_type: jenisBencana,
+          created_at: {
             gte: oneDayAgo,
           },
         },
       });
 
-      // Cek duplikasi berdasarkan jarak (200m radius)
-      if (lat && lng) {
-        const duplicateReport = existingReports.find(report => {
-          if (report.lat && report.lng) {
-            const distance = calculateDistance(lat, lng, report.lat, report.lng);
-            return distance <= 200; // 200 meter radius
-          }
-          return false;
-        });
-
-        if (duplicateReport) {
-          // Update jumlah reporters
-          const updatedReport = await prisma.report.update({
-            where: { id: duplicateReport.id },
-            data: { 
-              reporters: { increment: 1 },
-              updatedAt: new Date(),
-            },
-          });
-
-          return NextResponse.json({
-            verified: true,
-            isDuplicate: true,
-            duplicateOf: duplicateReport.id,
-            reporters: updatedReport.reporters,
-            message: `Laporan serupa sudah ada di ${duplicateReport.lokasi}. Laporan Anda ditambahkan sebagai konfirmasi (Total: ${updatedReport.reporters} pelapor).`,
-          });
-        }
-      }
 
       // Buat laporan baru jika tidak ada duplikasi
-      const newReport = await prisma.report.create({
+      const newReport = await prisma.emergency_reports.create({
         data: {
-          lokasi,
-          jenisBencana,
-          deskripsi,
+          location: lokasi,
+          emergency_type: jenisBencana,
+          description: deskripsi,
           fotoUrl: fotoUrl || null,
-          lat: lat || null,
-          lng: lng || null,
-          sumber: sumber || 'webform',
-          reporters: 1,
+          caller_info: sumber || 'webform',
+          report_number: "1",
         },
       });
 

@@ -109,8 +109,6 @@ export default function EdukasiPage() {
 
   const handleLocationDetected = (location: string, lat: number, lng: number) => {
     setDetectedLocations(prev => [...prev, { location, lat, lng }]);
-    // In real app, this would update the map or create a new report
-    console.log('Location detected from chat:', { location, lat, lng });
   };
 
   return (

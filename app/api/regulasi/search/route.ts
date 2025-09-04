@@ -146,9 +146,9 @@ export async function GET(request: NextRequest) {
     
     if (!query.trim()) {
       // Jika tidak ada query, return semua dokumen
-      results = await prisma.regulationDoc.findMany({
+      results = await prisma.regulation_docs.findMany({
         where: category ? { category } : {},
-        orderBy: { createdAt: 'desc' },
+        orderBy: { created_at: 'desc' },
         take: 20,
       });
     } else {
@@ -165,9 +165,9 @@ export async function GET(request: NextRequest) {
         whereClause.category = category;
       }
 
-      results = await prisma.regulationDoc.findMany({
+      results = await prisma.regulation_docs.findMany({
         where: whereClause,
-        orderBy: { createdAt: 'desc' },
+        orderBy: { created_at: 'desc' },
         take: 20,
       });
     }

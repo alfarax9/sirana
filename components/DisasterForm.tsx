@@ -19,6 +19,7 @@ const reportSchema = z.object({
   fotoUrl: z.string().url().optional().or(z.literal('')),
   lat: z.number().optional(),
   lng: z.number().optional(),
+  sumber: z.string().optional(),
 });
 
 type ReportForm = z.infer<typeof reportSchema>;
@@ -43,7 +44,6 @@ export default function DisasterForm({ onSubmit, isLoading }: DisasterFormProps)
     mode: 'onChange',
   });
 
-  const jenisBencana = watch('jenisBencana');
 
   const handleLocationPick = () => {
     // Mock location picker - in real app, this would open a map modal

@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { useState, useRef, useEffect } from 'react';
-import { Send, Bot, User, Loader2 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { ChatMessage } from '@/lib/types';
-import { extractLocation } from '@/lib/utils';
+import { useState, useRef, useEffect } from "react";
+import { Send, Bot, User, Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { ChatMessage } from "@/lib/types";
+import { extractLocation } from "@/lib/utils";
 
 interface EduChatbotProps {
   onLocationDetected?: (location: string, lat: number, lng: number) => void;
@@ -14,81 +14,104 @@ interface EduChatbotProps {
 export default function EduChatbot({ onLocationDetected }: EduChatbotProps) {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
-      id: '1',
-      message: 'Halo! Saya asisten virtual untuk edukasi kebencanaan. Anda dapat bertanya tentang mitigasi bencana, prosedur evakuasi, atau persiapan menghadapi bencana alam.',
+      id: "1",
+      message:
+        "Halo! Saya asisten virtual untuk edukasi kebencanaan. Anda dapat bertanya tentang mitigasi bencana, prosedur evakuasi, atau persiapan menghadapi bencana alam.",
       isBot: true,
       timestamp: new Date(),
     },
   ]);
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
 
-  const handleSendMessage = async () => {
-    if (!input.trim() || isLoading) return;
+const handleSendMessage = async () => {
+  if (!input.trim() || isLoading) return;
 
-    const userMessage: ChatMessage = {
-      id: Date.now().toString(),
-      message: input.trim(),
-      isBot: false,
+  const userMessage: ChatMessage = {
+    id: Date.now().toString(),
+    message: input.trim(),
+    isBot: false,
+    timestamp: new Date(),
+  };
+
+  setMessages((prev) => [...prev, userMessage]);
+  setInput("");
+  setIsLoading(true);
+
+  try {
+    if (!process.env.NEXT_PUBLIC_NGROK_URL) {
+      throw new Error("NGROK_URL not set in environment variables");
+    }
+
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_NGROK_URL}/webhook/whatsapp/json`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          MessageSid: `SM${Date.now()}`,
+          From: "whatsapp:+6281235667629", // Example sender
+          Body: userMessage.message,
+          MediaUrl0: "",
+          MediaContentType0: "",
+        }),
+      }
+    );
+
+    const jsonResponse = await response.json();
+
+    let botReply = "Terima kasih. Laporan Anda sedang diproses.";
+
+    if (jsonResponse.status === "success") {
+      botReply = jsonResponse.message || "Laporan berhasil diproses.";
+
+      // Optional: log emergency info
+      if (jsonResponse.emergency_info) {
+        console.log("Emergency Info:", jsonResponse.emergency_info);
+      }
+      if (jsonResponse.report_id) {
+        console.log("Report ID:", jsonResponse.report_id);
+      }
+    } else if (jsonResponse.status === "error") {
+      botReply =
+        jsonResponse.message || "Terjadi kesalahan dalam memproses laporan.";
+      console.error("Error:", jsonResponse.error);
+    }
+
+    const botMessage: ChatMessage = {
+      id: (Date.now() + 1).toString(),
+      message: botReply,
+      isBot: true,
       timestamp: new Date(),
     };
 
-    setMessages(prev => [...prev, userMessage]);
-    setInput('');
-    setIsLoading(true);
+    setMessages((prev) => [...prev, botMessage]);
+  } catch (error) {
+    console.error("Chat error:", error);
+    const errorMessage: ChatMessage = {
+      id: (Date.now() + 1).toString(),
+      message: "Maaf, terjadi kesalahan. Silakan coba lagi.",
+      isBot: true,
+      timestamp: new Date(),
+    };
+    setMessages((prev) => [...prev, errorMessage]);
+  } finally {
+    setIsLoading(false);
+  }
+};
 
-    try {
-      const response = await fetch('/api/edukasi/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: userMessage.message }),
-      });
-
-      const data = await response.json();
-
-      const botMessage: ChatMessage = {
-        id: (Date.now() + 1).toString(),
-        message: data.response,
-        isBot: true,
-        timestamp: new Date(),
-        detectedLocation: data.detectedLocation,
-      };
-
-      setMessages(prev => [...prev, botMessage]);
-
-      // If location detected, notify parent component
-      if (data.detectedLocation && data.coordinates) {
-        onLocationDetected?.(
-          data.detectedLocation,
-          data.coordinates.lat,
-          data.coordinates.lng
-        );
-      }
-    } catch (error) {
-      console.error('Chat error:', error);
-      const errorMessage: ChatMessage = {
-        id: (Date.now() + 1).toString(),
-        message: 'Maaf, terjadi kesalahan. Silakan coba lagi.',
-        isBot: true,
-        timestamp: new Date(),
-      };
-      setMessages(prev => [...prev, errorMessage]);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSendMessage();
     }
@@ -101,7 +124,9 @@ export default function EduChatbot({ onLocationDetected }: EduChatbotProps) {
           <Bot className="h-5 w-5 text-white" />
         </div>
         <div>
-          <h3 className="font-semibold text-dark">Asisten Edukasi Kebencanaan</h3>
+          <h3 className="font-semibold text-dark">
+            Asisten Edukasi Kebencanaan
+          </h3>
           <p className="text-xs text-gray-600">Selalu siap membantu 24/7</p>
         </div>
       </div>
@@ -111,15 +136,15 @@ export default function EduChatbot({ onLocationDetected }: EduChatbotProps) {
         {messages.map((message) => (
           <div
             key={message.id}
-            className={`flex ${message.isBot ? 'justify-start' : 'justify-end'}`}
-          >
+            className={`flex ${
+              message.isBot ? "justify-start" : "justify-end"
+            }`}>
             <div
               className={`max-w-[80%] p-3 rounded-lg ${
                 message.isBot
-                  ? 'bg-gray-100 text-dark'
-                  : 'bg-secondary text-white'
-              }`}
-            >
+                  ? "bg-gray-100 text-dark"
+                  : "bg-secondary text-white"
+              }`}>
               <div className="flex items-start space-x-2">
                 {message.isBot ? (
                   <Bot className="h-4 w-4 mt-0.5 text-secondary" />
@@ -136,9 +161,9 @@ export default function EduChatbot({ onLocationDetected }: EduChatbotProps) {
                     </div>
                   )}
                   <p className="text-xs opacity-70 mt-1">
-                    {message.timestamp.toLocaleTimeString('id-ID', { 
-                      hour: '2-digit', 
-                      minute: '2-digit' 
+                    {message.timestamp.toLocaleTimeString("id-ID", {
+                      hour: "2-digit",
+                      minute: "2-digit",
                     })}
                   </p>
                 </div>
@@ -152,7 +177,9 @@ export default function EduChatbot({ onLocationDetected }: EduChatbotProps) {
               <div className="flex items-center space-x-2">
                 <Bot className="h-4 w-4 text-secondary" />
                 <Loader2 className="h-4 w-4 animate-spin text-gray-500" />
-                <span className="text-sm text-gray-600">Sedang mengetik...</span>
+                <span className="text-sm text-gray-600">
+                  Sedang mengetik...
+                </span>
               </div>
             </div>
           </div>
@@ -176,8 +203,7 @@ export default function EduChatbot({ onLocationDetected }: EduChatbotProps) {
           disabled={!input.trim() || isLoading}
           size="sm"
           className="disaster-button-primary px-3"
-          aria-label="Kirim pesan"
-        >
+          aria-label="Kirim pesan">
           <Send className="h-4 w-4" />
         </Button>
       </div>
