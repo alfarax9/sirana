@@ -9,6 +9,8 @@
 /coverage
 
 # next.js
+./backup.json
+backup.json
 /.next/
 /out/
 
