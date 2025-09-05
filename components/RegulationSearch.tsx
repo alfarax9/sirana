@@ -8,58 +8,76 @@ import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { RegulationDoc } from '@/lib/types';
 import { REGULATION_CATEGORIES } from '@/lib/utils';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 interface RegulationSearchProps {
   onDocumentSelect?: (doc: RegulationDoc) => void;
 }
 
 export default function RegulationSearch({ onDocumentSelect }: RegulationSearchProps) {
-  const [query, setQuery] = useState('');
-  const [category, setCategory] = useState<string>('');
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
   const [results, setResults] = useState<RegulationDoc[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
 
+  const query = searchParams.get("query") ?? "";
+  const category = searchParams.get("category") ?? "";
+
   const handleSearch = async () => {
     if (!query.trim()) return;
-    
+
     setIsLoading(true);
     setHasSearched(true);
 
     try {
-      const params = new URLSearchParams();
-      params.append('query', query);
-      if (category) params.append('category', category);
-
-      const response = await fetch(`/api/regulasi/search?${params}`);
+      const response = await fetch(
+        `/api/regulasi/search?query=${encodeURIComponent(query)}&category=${encodeURIComponent(category)}`
+      );
       const data = await response.json();
       setResults(data);
     } catch (error) {
-      console.error('Search error:', error);
+      console.error("Search error:", error);
       setResults([]);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
+  // Jalankan search kalau query/category berubah
+  useEffect(() => {
+    if (query) {
       handleSearch();
     }
+  }, [query, category]);
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      updateURL(query, category);
+    }
+  };
+
+  const updateURL = (q: string, c: string) => {
+    const params = new URLSearchParams();
+    if (q) params.set("query", q);
+    if (c && c !== "all") params.set("category", c);
+
+    router.push(`?${params.toString()}`);
   };
 
   const getCategoryColor = (cat: string) => {
     const colors: Record<string, string> = {
-      'Undang-Undang': 'bg-blue-100 text-blue-800',
-      'SOP': 'bg-green-100 text-green-800',
-      'Prosedur Laporan': 'bg-orange-100 text-orange-800',
+      "Undang-Undang": "bg-blue-100 text-blue-800",
+      SOP: "bg-green-100 text-green-800",
+      "Prosedur Laporan": "bg-orange-100 text-orange-800",
     };
-    return colors[cat] || 'bg-gray-100 text-gray-800';
+    return colors[cat] || "bg-gray-100 text-gray-800";
   };
 
   return (
     <div className="space-y-6">
-      {/* Search Header */}
+      {/* Header */}
       <div className="text-center">
         <h2 className="text-2xl font-bold text-dark mb-2">
           Pencarian Regulasi Kebencanaan
@@ -69,35 +87,40 @@ export default function RegulationSearch({ onDocumentSelect }: RegulationSearchP
         </p>
       </div>
 
-      {/* Search Form */}
+      {/* Form */}
       <div className="disaster-card">
         <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
           <div className="flex-grow">
             <Input
               value={query}
-              onChange={(e) => setQuery(e.target.value)}
+              onChange={(e) => updateURL(e.target.value, category)}
               onKeyPress={handleKeyPress}
               placeholder="Cari berdasarkan kata kunci (contoh: prosedur evakuasi tsunami)"
               className="w-full"
               aria-label="Kata kunci pencarian"
             />
           </div>
-          
+
           <div className="flex space-x-2">
-            <Select value={category} onValueChange={setCategory}>
+            <Select
+              value={category || "all"}
+              onValueChange={(val) => updateURL(query, val)}
+            >
               <SelectTrigger className="w-48">
                 <SelectValue placeholder="Semua Kategori" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">Semua Kategori</SelectItem>
                 {REGULATION_CATEGORIES.map((cat) => (
-                  <SelectItem key={cat} value={cat}>{cat}</SelectItem>
+                  <SelectItem key={cat} value={cat}>
+                    {cat}
+                  </SelectItem>
                 ))}
               </SelectContent>
             </Select>
-            
+
             <Button
-              onClick={handleSearch}
+              onClick={() => updateURL(query, category)}
               disabled={!query.trim() || isLoading}
               className="disaster-button-primary flex items-center space-x-2"
             >
@@ -112,7 +135,7 @@ export default function RegulationSearch({ onDocumentSelect }: RegulationSearchP
         </div>
       </div>
 
-      {/* Search Results */}
+      {/* Results */}
       {hasSearched && (
         <div className="space-y-4">
           <div className="flex items-center justify-between">
@@ -124,7 +147,7 @@ export default function RegulationSearch({ onDocumentSelect }: RegulationSearchP
                 </span>
               )}
             </h3>
-            {category && (
+            {category && category !== "all" && (
               <Badge variant="outline" className="bg-secondary/10">
                 <Filter className="h-3 w-3 mr-1" />
                 {category}
@@ -156,20 +179,20 @@ export default function RegulationSearch({ onDocumentSelect }: RegulationSearchP
                     </Badge>
                     <FileText className="h-5 w-5 text-gray-400" />
                   </div>
-                  
+
                   <h4 className="font-semibold text-dark mb-2 line-clamp-2">
                     {doc.title}
                   </h4>
-                  
+
                   {doc.excerpt && (
                     <p className="text-sm text-gray-600 mb-3 line-clamp-3">
                       {doc.excerpt}
                     </p>
                   )}
-                  
+
                   <div className="flex items-center justify-between">
                     <span className="text-xs text-gray-500">
-                      {doc.createdAt.toLocaleDateString('id-ID')}
+                      {new Date(doc.createdAt).toLocaleDateString("id-ID")}
                     </span>
                     {doc.url && (
                       <ExternalLink className="h-4 w-4 text-secondary" />

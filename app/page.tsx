@@ -14,11 +14,11 @@ import {
   Clock,
 } from 'lucide-react';
 import CardStat from '@/components/CardStat';
-import RealtimeMap from '@/components/RealtimeMap';
 import NLPExtractionSteps from '@/components/NLPExtractionSteps';
 import { Report } from '@/lib/types';
 import { Button } from '@/components/ui/button';
-
+import dynamic from 'next/dynamic';
+const RealtimeMap = dynamic(() => import("@/components/RealtimeMap"), { ssr: false });
 const menuItems = [
   {
     title: 'Laporan Bencana',
@@ -208,7 +208,7 @@ export default function HomePage() {
                 <span className="text-sm text-gray-600">Live</span>
               </div>
             </div>
-            <RealtimeMap reports={reports} height="500px" />
+            <RealtimeMap height="500px" />
           </div>
         </section>
 
