@@ -177,7 +177,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "E:\\Coding\\AxiooAi\\sirana\\generated\\prisma",
+      "value": "C:\\Users\\maula\\sirana\\generated\\prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -191,7 +191,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "E:\\Coding\\AxiooAi\\sirana\\prisma\\schema.prisma",
+    "sourceFilePath": "C:\\Users\\maula\\sirana\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
@@ -205,6 +205,7 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
