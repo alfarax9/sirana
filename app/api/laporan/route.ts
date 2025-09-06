@@ -41,7 +41,6 @@ export async function GET() {
     // Coba ambil data dari database
     const reports = await prisma.emergency_reports.findMany({
       orderBy: { created_at: 'desc' },
-      take: 100, // Limit untuk performa
     });
 
     return NextResponse.json(reports);

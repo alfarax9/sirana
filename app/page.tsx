@@ -112,7 +112,7 @@ export default function HomePage() {
                 <Button 
                   size="lg" 
                   variant="outline" 
-                  className="border-white text-white hover:bg-white hover:text-secondary text-lg px-8 py-3"
+                  className="border-white text-white hover:bg-white bg-secondary hover:text-secondary text-lg px-8 py-3"
                 >
                   Pelajari Mitigasi
                 </Button>

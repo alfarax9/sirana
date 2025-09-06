@@ -73,7 +73,7 @@ export default function RealtimeMap({
   };
 
   return (
-    <div className="relative w-full" style={{ height }}>
+    <div className="relative w-full z-0" style={{ height }}>
       <MapContainer
         center={[-2.5, 118]}
         zoom={5}
