@@ -112,7 +112,7 @@ export default function DisasterForm({ onSubmit, isLoading }: DisasterFormProps)
           {/* Disaster Type */}
           <div className="space-y-2">
             <Label htmlFor="jenisBencana" className="text-sm font-medium text-dark">
-              Jenis Bencana *
+              Jenis Keadaan Darurat *
             </Label>
             <Input
                 id="jenisBencana"

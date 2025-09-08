@@ -1,13 +1,13 @@
 "use client";
 
-import { useState } from "react";
 import DisasterForm from "@/components/DisasterForm";
 import NLPExtractionSteps from "@/components/NLPExtractionSteps";
+import { Button } from "@/components/ui/button";
 import VerificationResult from "@/components/VerificationResult";
 import { VerificationResult as VerificationResultType } from "@/lib/types";
 import { AlertTriangle } from "lucide-react";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { useState } from "react";
 
 type ProcessStage = "form" | "processing" | "verification";
 
@@ -22,51 +22,65 @@ export default function LaporanPage() {
     setIsNLPProcessing(true);
   };
 
-  const handleNLPComplete = async () => {
-    setIsNLPProcessing(false);
+const handleNLPComplete = async () => {
+  setIsNLPProcessing(false);
 
-    try {
-      // Prepare form-encoded data like Twilio sends
-      const formData = new URLSearchParams();
-      formData.append("MessageSid", "SM" + Date.now()); // mock MessageSid
-      formData.append("From", "whatsapp:+6281235667629"); // mock WhatsApp number
-      formData.append("Body", "Banjir setinggi 50cm di Jakarta Pusat"); // combine form values
-      formData.append("MediaUrl0", ""); // optional if no media
-      formData.append("MediaContentType0", ""); // optional
+  try {
+    if (!process.env.NEXT_PUBLIC_NGROK_URL) {
+      throw new Error("NGROK_URL not set in environment variables");
+    }
 
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_NGROK_URL}/webhook/whatsapp`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          body: formData.toString(),
-        }
-      );
+    const payload = {
+      MessageSid: `SM${Date.now()}`, // mock MessageSid
+      From: "whatsapp:+6281235667629", // mock WhatsApp number
+      Body: "Banjir setinggi 50cm di Jakarta Pusat", // hasil NLP
+      MediaUrl0: "",
+      MediaContentType0: "",
+    };
 
-      // Flask Twilio webhook usually returns XML (MessagingResponse)
-      const resultText = await response.text();
-      console.log("Webhook response:", resultText);
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_NGROK_URL}/webhook/whatsapp/json`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      }
+    );
 
-      // You can update your verification result if you parse it or just set success
+    const jsonResponse = await response.json();
+    console.log("Webhook JSON response:", jsonResponse);
+
+    if (jsonResponse.status === "success") {
       setVerificationResult({
         verified: true,
-        isDuplicate: false,
-        reporters: 1,
-        message: "Laporan berhasil dikirim via WhatsApp webhook.",
+        isDuplicate: jsonResponse.isDuplicate || false,
+        reporters: jsonResponse.reporters || 1,
+        message: jsonResponse.message || "Laporan berhasil dikirim via webhook.",
       });
-
-      setStage("verification");
-    } catch (error) {
-      console.error("Verification error:", error);
+    } else {
       setVerificationResult({
         verified: false,
         isDuplicate: false,
         reporters: 1,
-        message: "Terjadi kesalahan sistem. Silakan coba lagi.",
+        message:
+          jsonResponse.message ||
+          "Terjadi kesalahan dalam memproses laporan NLP.",
       });
-      setStage("verification");
     }
-  };
+
+    setStage("verification");
+  } catch (error) {
+    console.error("Verification error:", error);
+    setVerificationResult({
+      verified: false,
+      isDuplicate: false,
+      reporters: 1,
+      message: "Terjadi kesalahan sistem. Silakan coba lagi.",
+    });
+    setStage("verification");
+  }
+};
+
 
   const handleRetry = () => {
     setStage("form");
