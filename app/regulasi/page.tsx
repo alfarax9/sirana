@@ -12,8 +12,8 @@ const featuredRegulations = [
   {
     category: 'Undang-Undang',
     title: 'UU No. 24 Tahun 2007',
-    subtitle: 'Penanggulangan Bencana',
-    description: 'Undang-undang dasar tentang sistem penanggulangan bencana nasional',
+    subtitle: 'Penanggulangan kedaruratan',
+    description: 'Undang-undang dasar tentang sistem penanggulangan kedaruratan nasional',
     url: '#',
   },
   {
@@ -25,9 +25,9 @@ const featuredRegulations = [
   },
   {
     category: 'Prosedur Laporan',
-    title: 'Prosedur Pelaporan Bencana',
+    title: 'Prosedur Pelaporan kedaruratan',
     subtitle: 'Panduan Pelaporan',
-    description: 'Tata cara dan format standar pelaporan kejadian bencana',
+    description: 'Tata cara dan format standar pelaporan kejadian darurat',
     url: '#',
   },
 ];
@@ -56,10 +56,10 @@ export default function RegulasiPage() {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-3xl md:text-4xl font-bold text-dark mb-4">
-            Regulasi Kebencanaan
+            Regulasi Kedaruratan
           </h1>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            Cari dan akses dokumen regulasi, SOP, dan prosedur kebencanaan 
+            Cari dan akses dokumen regulasi, SOP, dan prosedur Kedaruratan 
             dengan teknologi pencarian cerdas berbasis NLP
           </p>
         </div>
@@ -120,7 +120,7 @@ export default function RegulasiPage() {
                 </div>
                 <h3 className="font-semibold text-dark mb-2">Undang-Undang</h3>
                 <p className="text-sm text-gray-600 mb-4">
-                  Peraturan perundang-undangan tingkat nasional tentang kebencanaan
+                  Peraturan perundang-undangan tingkat nasional tentang Kedaruratan
                 </p>
                 <div className="text-2xl font-bold text-blue-600">24</div>
                 <p className="text-xs text-gray-500">Dokumen tersedia</p>
@@ -144,7 +144,7 @@ export default function RegulasiPage() {
                 </div>
                 <h3 className="font-semibold text-dark mb-2">Prosedur Laporan</h3>
                 <p className="text-sm text-gray-600 mb-4">
-                  Panduan pelaporan dan dokumentasi kejadian bencana
+                  Panduan pelaporan dan dokumentasi kejadian darurat
                 </p>
                 <div className="text-2xl font-bold text-orange-600">89</div>
                 <p className="text-xs text-gray-500">Dokumen tersedia</p>
@@ -181,7 +181,7 @@ export default function RegulasiPage() {
                   summary: 'Implementasi sistem pelaporan berbasis aplikasi mobile',
                 },
                 {
-                  title: 'UU Perubahan Dana Penanggulangan Bencana',
+                  title: 'UU Perubahan Dana Penanggulangan darurat',
                   category: 'Undang-Undang',
                   date: '8 Jan 2024',
                   summary: 'Revisi alokasi dana dan mekanisme pencairan untuk tanggap darurat',

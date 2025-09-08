@@ -16,7 +16,7 @@ export default function EduChatbot({ onLocationDetected }: EduChatbotProps) {
     {
       id: "1",
       message:
-        "Halo! Saya asisten virtual untuk edukasi kebencanaan. Anda dapat bertanya tentang mitigasi bencana, prosedur evakuasi, atau persiapan menghadapi bencana alam.",
+        "Halo! Saya asisten virtual untuk edukasi kedaruratan. Anda dapat bertanya tentang mitigasi darurat, prosedur evakuasi, atau persiapan menghadapi keadaan darurat.",
       isBot: true,
       timestamp: new Date(),
     },
@@ -125,7 +125,7 @@ const handleSendMessage = async () => {
         </div>
         <div>
           <h3 className="font-semibold text-dark">
-            Asisten Edukasi Kebencanaan
+            Asisten Edukasi kedaruratan
           </h3>
           <p className="text-xs text-gray-600">Selalu siap membantu 24/7</p>
         </div>
@@ -193,10 +193,10 @@ const handleSendMessage = async () => {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyPress={handleKeyPress}
-          placeholder="Tanyakan tentang mitigasi bencana..."
+          placeholder="Tanyakan tentang mitigasi kedaruratan..."
           disabled={isLoading}
           className="flex-grow"
-          aria-label="Ketik pertanyaan tentang bencana"
+          aria-label="Ketik pertanyaan tentang kedaruratann"
         />
         <Button
           onClick={handleSendMessage}

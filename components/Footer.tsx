@@ -14,13 +14,13 @@ export default function Footer() {
               </div>
               <div>
                 <span className="text-xl font-bold">SiRANA</span>
-                <p className="text-sm text-gray-300">Sistem Regulasi & Analisis Bencana</p>
+                <p className="text-sm text-gray-300">Sistem Regulasi & Analisis Kedaruratan</p>
               </div>
             </div>
             <p className="text-gray-300 text-sm leading-relaxed">
-              Platform terintegrasi untuk otomatisasi regulasi dan edukasi kebencanaan 
+              Platform terintegrasi untuk otomatisasi regulasi dan edukasi Kedaruratan 
               menggunakan teknologi Natural Language Processing (NLP) yang membantu 
-              masyarakat dalam pelaporan dan pemahaman prosedur kebencanaan.
+              masyarakat dalam pelaporan dan pemahaman prosedur Kedaruratan.
             </p>
           </div>
 
@@ -35,12 +35,12 @@ export default function Footer() {
               </li>
               <li>
                 <Link href="/laporan" className="text-gray-300 hover:text-white transition-colors duration-200">
-                  Laporan Bencana
+                  Laporan Darurat
                 </Link>
               </li>
               <li>
                 <Link href="/edukasi" className="text-gray-300 hover:text-white transition-colors duration-200">
-                  Edukasi Kebencanaan
+                  Edukasi Kedaruratan
                 </Link>
               </li>
               <li>

@@ -80,7 +80,7 @@ export default function RegulationSearch({ onDocumentSelect }: RegulationSearchP
       {/* Header */}
       <div className="text-center">
         <h2 className="text-2xl font-bold text-dark mb-2">
-          Pencarian Regulasi Kebencanaan
+          Pencarian Regulasi Kedaruratan
         </h2>
         <p className="text-gray-600">
           Temukan dokumen regulasi, SOP, dan prosedur dengan teknologi NLP

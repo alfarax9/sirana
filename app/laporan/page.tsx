@@ -84,10 +84,10 @@ export default function LaporanPage() {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-3xl md:text-4xl font-bold text-dark mb-4">
-            Pelaporan Bencana Cerdas
+            Pelaporan Darurat Cerdas
           </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Sistem otomatis dengan teknologi NLP untuk memproses laporan bencana
+            Sistem otomatis dengan teknologi NLP untuk memproses laporan darurat
             dan mengirim notifikasi ke instansi terkait
           </p>
         </div>

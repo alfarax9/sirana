@@ -24,10 +24,10 @@ const emergencyContacts: EmergencyContact[] = [
     name: 'Pusat Komando Nasional',
     organization: 'BNPB',
     phone: '119',
-    description: 'Pusat koordinasi bencana nasional yang melayani 24 jam',
+    description: 'Pusat koordinasi darurat nasional yang melayani 24 jam',
     category: 'national',
     availability: '24/7',
-    specialties: ['Koordinasi Nasional', 'Mobilisasi Sumber Daya', 'Informasi Bencana'],
+    specialties: ['Koordinasi Nasional', 'Mobilisasi Sumber Daya', 'Informasi kedaruratan'],
   },
   {
     id: '2',
@@ -62,29 +62,29 @@ const emergencyContacts: EmergencyContact[] = [
   {
     id: '5',
     name: 'BPBD DKI Jakarta',
-    organization: 'Badan Penanggulangan Bencana Daerah',
+    organization: 'Badan Penanggulangan kedaruratan Daerah',
     phone: '(021) 2305-0119',
-    description: 'Koordinasi bencana tingkat provinsi DKI Jakarta',
+    description: 'Koordinasi kedaruratan tingkat provinsi DKI Jakarta',
     category: 'regional',
     availability: '24/7',
     region: 'DKI Jakarta',
-    specialties: ['Koordinasi Regional', 'Manajemen Bencana', 'Logistik'],
+    specialties: ['Koordinasi Regional', 'Manajemen kedaruratan', 'Logistik'],
   },
   {
     id: '6',
     name: 'BPBD Jawa Barat',
-    organization: 'Badan Penanggulangan Bencana Daerah',
+    organization: 'Badan Penanggulangan kedaruratan Daerah',
     phone: '(022) 2534-4119',
-    description: 'Koordinasi bencana tingkat provinsi Jawa Barat',
+    description: 'Koordinasi kedaruratan tingkat provinsi Jawa Barat',
     category: 'regional',
     availability: '24/7',
     region: 'Jawa Barat',
-    specialties: ['Koordinasi Regional', 'Manajemen Bencana', 'Logistik'],
+    specialties: ['Koordinasi Regional', 'Manajemen kedaruratan', 'Logistik'],
   },
 ];
 
 const quickActions = [
-  { title: 'Laporkan Bencana', href: '/laporan', color: 'bg-secondary' },
+  { title: 'Laporkan kedaruratan', href: '/laporan', color: 'bg-secondary' },
   { title: 'Pelajari Mitigasi', href: '/edukasi', color: 'bg-blue-600' },
   { title: 'Cari SOP', href: '/regulasi', color: 'bg-green-600' },
 ];
@@ -138,7 +138,7 @@ export default function KontakDaruratPage() {
             Kontak Darurat
           </h1>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            Akses cepat ke nomor telepon darurat, instansi penanggulangan bencana, 
+            Akses cepat ke nomor telepon darurat, instansi penanggulangan kedaruratan, 
             dan layanan penyelamatan di seluruh Indonesia
           </p>
         </div>

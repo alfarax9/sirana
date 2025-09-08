@@ -21,15 +21,15 @@ import dynamic from 'next/dynamic';
 const RealtimeMap = dynamic(() => import("@/components/RealtimeMap"), { ssr: false });
 const menuItems = [
   {
-    title: 'Laporan Bencana',
-    description: 'Laporkan kejadian bencana dengan sistem NLP otomatis',
+    title: 'Laporan Kedaruratan',
+    description: 'Laporkan kejadian Kedaruraratan dengan sistem NLP otomatis',
     icon: FileText,
     href: '/laporan',
     color: 'bg-blue-500',
   },
   {
-    title: 'Edukasi Kebencanaan',
-    description: 'Pelajari mitigasi bencana dengan AI chatbot interaktif',
+    title: 'Edukasi Kedaruratan',
+    description: 'Pelajari mitigasi kedaruratan dengan AI chatbot interaktif',
     icon: BookOpen,
     href: '/edukasi',
     color: 'bg-green-500',
@@ -94,17 +94,17 @@ export default function HomePage() {
             <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
               Sistem Integrasi NLP
               <span className="block text-white/90 text-3xl md:text-5xl">
-                Regulasi & Edukasi Kebencanaan
+                Regulasi & Edukasi Kedaruratan
               </span>
             </h1>
             <p className="text-xl md:text-2xl text-white/90 mb-8 max-w-3xl mx-auto">
-              Platform cerdas untuk pelaporan bencana otomatis, edukasi masyarakat, 
+              Platform cerdas untuk pelaporan kedaruratan otomatis, edukasi masyarakat, 
               dan pencarian regulasi menggunakan teknologi AI
             </p>
             <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
               <Link href="/laporan">
                 <Button size="lg" className="bg-white text-secondary hover:bg-gray-100 text-lg px-8 py-3">
-                  Laporkan Bencana
+                  Laporkan Keadaan Darurat
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </Link>
@@ -129,7 +129,7 @@ export default function HomePage() {
             <CardStat
               title="Total Laporan"
               value={stats.totalReports}
-              description="Laporan bencana tercatat"
+              description="Laporan kedaruratan tercatat"
               icon={FileText}
               trend={{ value: 12, isPositive: true }}
             />
@@ -164,7 +164,7 @@ export default function HomePage() {
             </h2>
             <p className="text-gray-600 text-lg max-w-2xl mx-auto">
               Pilih layanan yang Anda butuhkan untuk mendapatkan informasi 
-              atau melaporkan kejadian kebencanaan
+              atau melaporkan kejadian kedaruratan
             </p>
           </div>
 
@@ -197,10 +197,10 @@ export default function HomePage() {
             <div className="flex items-center justify-between mb-6">
               <div>
                 <h2 className="text-2xl font-bold text-dark mb-2">
-                  Peta Real-time Bencana
+                  Peta Real-time Kedaruratan
                 </h2>
                 <p className="text-gray-600">
-                  Monitoring kejadian bencana di seluruh Indonesia secara langsung
+                  Monitoring kejadian kedaruratan di seluruh Indonesia secara langsung
                 </p>
               </div>
               <div className="flex items-center space-x-2">
@@ -221,7 +221,7 @@ export default function HomePage() {
               </h2>
               <p className="text-gray-600 max-w-2xl mx-auto">
                 Sistem kami menggunakan teknologi Natural Language Processing 
-                untuk menganalisis dan memproses laporan bencana secara otomatis
+                untuk menganalisis dan memproses laporan kedaruratan secara otomatis
               </p>
             </div>
             <NLPExtractionSteps />
@@ -232,7 +232,7 @@ export default function HomePage() {
         <section className="text-center">
           <div className="bg-gradient-to-r from-secondary to-secondary/80 rounded-2xl p-8 md:p-12 text-white">
             <h2 className="text-3xl font-bold mb-4">
-              Siap Melaporkan Bencana?
+              Siap Melaporkan kedaruratan?
             </h2>
             <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
               Sistem AI kami akan membantu memproses laporan Anda dengan cepat 

@@ -8,8 +8,8 @@ import { Toaster } from '@/components/ui/sonner';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Sistem Integrasi NLP - Regulasi & Edukasi Kebencanaan',
-  description: 'Platform terintegrasi untuk otomatisasi regulasi dan edukasi kebencanaan menggunakan teknologi NLP',
+  title: 'Sistem Integrasi NLP - Regulasi & Edukasi Kedaruratan',
+  description: 'Platform terintegrasi untuk otomatisasi regulasi dan edukasi kedaruratan menggunakan teknologi NLP',
 };
 
 export default function RootLayout({

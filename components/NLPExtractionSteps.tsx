@@ -31,8 +31,8 @@ export default function NLPExtractionSteps({
     },
     {
       id: 2,
-      title: 'Klasifikasi Jenis Bencana',
-      description: 'Menganalisis teks untuk menentukan kategori dan tingkat keparahan bencana',
+      title: 'Klasifikasi Jenis keadaan darurat',
+      description: 'Menganalisis teks untuk menentukan kategori dan tingkat keparahan keadaan darurat',
       icon: <Brain className="h-5 w-5" />,
       status: 'pending',
     },

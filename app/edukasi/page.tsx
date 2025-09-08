@@ -19,14 +19,14 @@ interface EducationSection {
 const educationSections: EducationSection[] = [
   {
     id: 'mitigasi',
-    title: 'Materi Mitigasi Bencana',
+    title: 'Materi Mitigasi Kedaruratan',
     icon: <Book className="h-5 w-5" />,
     content: [
       {
         title: 'Persiapan Menghadapi Gempa Bumi',
         description: 'Langkah-langkah preventif sebelum, saat, dan setelah gempa bumi',
         details: [
-          'Persiapkan tas siaga bencana dengan makanan, air, obat-obatan, dan dokumen penting',
+          'Persiapkan tas siaga kedaruratan dengan makanan, air, obat-obatan, dan dokumen penting',
           'Kenali jalur evakuasi terdekat dari rumah, kantor, dan sekolah',
           'Latihan rutin drop, cover, dan hold on dengan keluarga',
           'Pastikan struktur bangunan rumah tahan gempa dan perbaiki yang retak',
@@ -34,7 +34,7 @@ const educationSections: EducationSection[] = [
       },
       {
         title: 'Mitigasi Banjir',
-        description: 'Tindakan pencegahan dan persiapan menghadapi bencana banjir',
+        description: 'Tindakan pencegahan dan persiapan menghadapi kedaruratan banjir',
         details: [
           'Bersihkan saluran air dan drainase secara berkala',
           'Siapkan pompa air dan peralatan untuk mengalirkan air',
@@ -60,8 +60,8 @@ const educationSections: EducationSection[] = [
         ],
       },
       {
-        title: 'Bagaimana cara melaporkan bencana?',
-        description: 'Panduan lengkap pelaporan kejadian bencana',
+        title: 'Bagaimana cara melaporkan kedaruratan?',
+        description: 'Panduan lengkap pelaporan kejadian kedaruratan',
         details: [
           'Gunakan form pelaporan di website ini untuk laporan terstruktur',
           'Sertakan lokasi yang jelas dan koordinat jika memungkinkan',
@@ -73,7 +73,7 @@ const educationSections: EducationSection[] = [
   },
   {
     id: 'simulasi',
-    title: 'Video Simulasi Kebencanaan',
+    title: 'Video Simulasi Kedaruratan',
     icon: <Video className="h-5 w-5" />,
     content: [
       {
@@ -117,10 +117,10 @@ export default function EdukasiPage() {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-3xl md:text-4xl font-bold text-dark mb-4">
-            Edukasi Kebencanaan
+            Edukasi Kedaruratan
           </h1>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            Pelajari mitigasi bencana, prosedur darurat, dan dapatkan panduan 
+            Pelajari mitigasi kedaruratan, prosedur darurat, dan dapatkan panduan 
             dari asisten AI yang selalu siap membantu Anda 24/7
           </p>
         </div>
@@ -167,10 +167,10 @@ export default function EdukasiPage() {
           <div className="lg:sticky lg:top-8">
             <div className="mb-4">
               <h2 className="text-xl font-bold text-dark mb-2">
-                Asisten AI Kebencanaan
+                Asisten AI Kedaruratan
               </h2>
               <p className="text-gray-600 text-sm">
-                Tanyakan apa saja tentang mitigasi dan tanggap darurat bencana
+                Tanyakan apa saja tentang mitigasi dan tanggap darurat daruraratan
               </p>
             </div>
             

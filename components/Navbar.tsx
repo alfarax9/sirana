@@ -8,8 +8,8 @@ import { cn } from '@/lib/utils';
 
 const navigation = [
   { name: 'Beranda', href: '/' },
-  { name: 'Laporan Bencana', href: '/laporan' },
-  { name: 'Edukasi Kebencanaan', href: '/edukasi' },
+  { name: 'Laporan Darurat', href: '/laporan' },
+  { name: 'Edukasi Kedaruratan', href: '/edukasi' },
   { name: 'Regulasi', href: '/regulasi' },
   { name: 'Kontak Darurat', href: '/kontak-darurat' },
 ];
@@ -29,7 +29,7 @@ export default function Navbar() {
               </div>
               <div className="hidden sm:block">
                 <span className="text-xl font-bold text-dark">SiRANA</span>
-                <p className="text-xs text-gray-600">Sistem Regulasi & Analisis Bencana</p>
+                <p className="text-xs text-gray-600">Sistem Regulasi & Analisis Keadaan Darurat</p>
               </div>
             </Link>
           </div>

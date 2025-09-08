@@ -44,18 +44,6 @@ export function extractLocation(text: string): string | null {
   return null;
 }
 
-export const DISASTER_TYPES = [
-  'Gempa Bumi',
-  'Tsunami',
-  'Gunung Berapi',
-  'Banjir',
-  'Longsor',
-  'Kekeringan',
-  'Kebakaran Hutan',
-  'Angin Puting Beliung',
-  'Gelombang Pasang',
-  'Lainnya'
-];
 
 export const REGULATION_CATEGORIES = [
   'Undang-Undang',

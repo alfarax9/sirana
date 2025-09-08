@@ -5,7 +5,6 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { MapPin, Upload, Send } from 'lucide-react';
-import { DISASTER_TYPES } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -14,7 +13,7 @@ import { Label } from '@/components/ui/label';
 
 const reportSchema = z.object({
   lokasi: z.string().min(3, 'Lokasi minimal 3 karakter'),
-  jenisBencana: z.string().min(1, 'Pilih jenis bencana'),
+  jenisBencana: z.string().min(1, 'Pilih jenis keadaan darurat'),
   deskripsi: z.string().min(10, 'Deskripsi minimal 10 karakter'),
   fotoUrl: z.string().url().optional().or(z.literal('')),
   lat: z.number().optional(),
@@ -67,10 +66,10 @@ export default function DisasterForm({ onSubmit, isLoading }: DisasterFormProps)
       <div className="disaster-card">
         <div className="text-center mb-8">
           <h2 className="text-2xl font-bold text-dark mb-2">
-            Formulir Laporan Bencana
+            Formulir Laporan Darurat
           </h2>
           <p className="text-gray-600">
-            Laporkan kejadian bencana untuk mendapatkan bantuan segera
+            Laporkan kejadian darurat untuk mendapatkan bantuan segera
           </p>
         </div>
 
@@ -115,21 +114,14 @@ export default function DisasterForm({ onSubmit, isLoading }: DisasterFormProps)
             <Label htmlFor="jenisBencana" className="text-sm font-medium text-dark">
               Jenis Bencana *
             </Label>
-            <Select onValueChange={(value) => setValue('jenisBencana', value)}>
-              <SelectTrigger id="jenisBencana" aria-describedby="jenisBencana-error">
-                <SelectValue placeholder="Pilih jenis bencana" />
-              </SelectTrigger>
-              <SelectContent>
-                {DISASTER_TYPES.map((type) => (
-                  <SelectItem key={type} value={type}>
-                    {type}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            {errors.jenisBencana && (
-              <p id="jenisBencana-error" className="text-xs text-error">{errors.jenisBencana.message}</p>
-            )}
+            <Input
+                id="jenisBencana"
+                type="text"
+                placeholder="kebakaran, banjir, gempa bumi, dll."
+                {...register('jenisBencana')}
+                className="flex-grow"
+                aria-describedby="jenisBencana-error"
+              />
           </div>
 
           {/* Description */}
