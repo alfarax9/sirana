@@ -1,6 +1,5 @@
 generator client {
   provider = "prisma-client-js"
-  
 }
 
 datasource db {
@@ -20,6 +19,10 @@ model emergency_reports {
   urgency_level          Int?
   description            String?
   structured_data        Json?
+  lat                    Float?
+  lng                    Float?
+  geocode_confidence     String?
+  geocode_label          String?
   fotoUrl                String?
   ai_recommendations     Json?
   status                 String?                  @default("BARU") @db.VarChar(20)
