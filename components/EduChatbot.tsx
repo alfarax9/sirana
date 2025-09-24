@@ -23,6 +23,7 @@ export default function EduChatbot({ onLocationDetected }: EduChatbotProps) {
   ]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isStreaming, setIsStreaming] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -33,25 +34,175 @@ export default function EduChatbot({ onLocationDetected }: EduChatbotProps) {
     scrollToBottom();
   }, [messages]);
 
-const handleSendMessage = async () => {
-  if (!input.trim() || isLoading) return;
+  const handleSendMessage = async () => {
+    if (!input.trim() || isLoading || isStreaming) return;
 
-  const userMessage: ChatMessage = {
-    id: Date.now().toString(),
-    message: input.trim(),
-    isBot: false,
-    timestamp: new Date(),
+    const userMessage: ChatMessage = {
+      id: Date.now().toString(),
+      message: input.trim(),
+      isBot: false,
+      timestamp: new Date(),
+    };
+
+    setMessages((prev) => [...prev, userMessage]);
+    setInput("");
+    setIsLoading(true);
+
+    try {
+      if (!process.env.NEXT_PUBLIC_NGROK_URL) {
+        throw new Error("NGROK_URL not set in environment variables");
+      }
+
+      // Check if streaming endpoint is available, fallback to regular JSON endpoint
+      const useStreaming = true; // You can make this configurable
+
+      if (useStreaming) {
+        await handleStreamingResponse(userMessage.message);
+      } else {
+        await handleRegularResponse(userMessage.message);
+      }
+    } catch (error) {
+      console.error("Chat error:", error);
+      const errorMessage: ChatMessage = {
+        id: (Date.now() + 1).toString(),
+        message: "Maaf, terjadi kesalahan. Silakan coba lagi.",
+        isBot: true,
+        timestamp: new Date(),
+      };
+      setMessages((prev) => [...prev, errorMessage]);
+    } finally {
+      setIsLoading(false);
+      setIsStreaming(false);
+    }
   };
 
-  setMessages((prev) => [...prev, userMessage]);
-  setInput("");
-  setIsLoading(true);
+  const handleStreamingResponse = async (messageText: string) => {
+    setIsStreaming(true);
+    
+    // Create initial bot message for streaming
+    const botMessageId = (Date.now() + 1).toString();
+    let streamedContent = "";
+    
+    const initialBotMessage: ChatMessage = {
+      id: botMessageId,
+      message: "",
+      isBot: true,
+      timestamp: new Date(),
+    };
+    
+    setMessages((prev) => [...prev, initialBotMessage]);
 
-  try {
-    if (!process.env.NEXT_PUBLIC_NGROK_URL) {
-      throw new Error("NGROK_URL not set in environment variables");
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_NGROK_URL}/webhook/whatsapp/stream`,
+        {
+          method: "POST",
+          headers: { 
+            "Content-Type": "application/json",
+            "Accept": "text/plain",
+          },
+          body: JSON.stringify({
+            MessageSid: `SM${Date.now()}`,
+            From: "whatsapp:+6281235667629",
+            Body: messageText,
+            MediaUrl0: "",
+            MediaContentType0: "",
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const reader = response.body?.getReader();
+      if (!reader) {
+        throw new Error("No response body reader available");
+      }
+
+      const decoder = new TextDecoder();
+      let buffer = "";
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        buffer = lines.pop() || "";
+
+        for (const line of lines) {
+          if (line.startsWith('data: ')) {
+            try {
+              const data = JSON.parse(line.slice(6));
+              
+              if (data.type === 'status') {
+                // Show status updates as temporary messages
+                setMessages((prev) => 
+                  prev.map((msg) => 
+                    msg.id === botMessageId 
+                      ? { ...msg, message: `⏳ ${data.message}` }
+                      : msg
+                  )
+                );
+              } else if (data.type === 'token') {
+                // Append streaming tokens
+                streamedContent += data.content;
+                setMessages((prev) => 
+                  prev.map((msg) => 
+                    msg.id === botMessageId 
+                      ? { ...msg, message: streamedContent }
+                      : msg
+                  )
+                );
+              } else if (data.type === 'report_id') {
+                console.log("Report ID:", data.report_id);
+              } else if (data.type === 'complete') {
+                // Final completion data
+                console.log("Emergency Info:", data.emergency_info);
+                console.log("Final Report ID:", data.report_id);
+              } else if (data.type === 'error') {
+                streamedContent = data.message;
+                setMessages((prev) => 
+                  prev.map((msg) => 
+                    msg.id === botMessageId 
+                      ? { ...msg, message: streamedContent }
+                      : msg
+                  )
+                );
+              }
+            } catch (parseError) {
+              console.error("Error parsing stream data:", parseError);
+            }
+          }
+        }
+      }
+
+      // Ensure final message is properly set
+      if (!streamedContent) {
+        streamedContent = "Laporan Anda telah diproses.";
+        setMessages((prev) => 
+          prev.map((msg) => 
+            msg.id === botMessageId 
+              ? { ...msg, message: streamedContent }
+              : msg
+          )
+        );
+      }
+
+    } catch (error) {
+      console.error("Streaming error:", error);
+      setMessages((prev) => 
+        prev.map((msg) => 
+          msg.id === botMessageId 
+            ? { ...msg, message: "Maaf, terjadi kesalahan dalam streaming. Silakan coba lagi." }
+            : msg
+        )
+      );
     }
+  };
 
+  const handleRegularResponse = async (messageText: string) => {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_NGROK_URL}/webhook/whatsapp/json`,
       {
@@ -59,8 +210,8 @@ const handleSendMessage = async () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           MessageSid: `SM${Date.now()}`,
-          From: "whatsapp:+6281235667629", // Example sender
-          Body: userMessage.message,
+          From: "whatsapp:+6281235667629",
+          Body: messageText,
           MediaUrl0: "",
           MediaContentType0: "",
         }),
@@ -74,7 +225,6 @@ const handleSendMessage = async () => {
     if (jsonResponse.status === "success") {
       botReply = jsonResponse.message || "Laporan berhasil diproses.";
 
-      // Optional: log emergency info
       if (jsonResponse.emergency_info) {
         console.log("Emergency Info:", jsonResponse.emergency_info);
       }
@@ -82,8 +232,7 @@ const handleSendMessage = async () => {
         console.log("Report ID:", jsonResponse.report_id);
       }
     } else if (jsonResponse.status === "error") {
-      botReply =
-        jsonResponse.message || "Terjadi kesalahan dalam memproses laporan.";
+      botReply = jsonResponse.message || "Terjadi kesalahan dalam memproses laporan.";
       console.error("Error:", jsonResponse.error);
     }
 
@@ -95,20 +244,7 @@ const handleSendMessage = async () => {
     };
 
     setMessages((prev) => [...prev, botMessage]);
-  } catch (error) {
-    console.error("Chat error:", error);
-    const errorMessage: ChatMessage = {
-      id: (Date.now() + 1).toString(),
-      message: "Maaf, terjadi kesalahan. Silakan coba lagi.",
-      isBot: true,
-      timestamp: new Date(),
-    };
-    setMessages((prev) => [...prev, errorMessage]);
-  } finally {
-    setIsLoading(false);
-  }
-};
-
+  };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -171,14 +307,14 @@ const handleSendMessage = async () => {
             </div>
           </div>
         ))}
-        {isLoading && (
+        {(isLoading || isStreaming) && (
           <div className="flex justify-start">
             <div className="bg-gray-100 p-3 rounded-lg">
               <div className="flex items-center space-x-2">
                 <Bot className="h-4 w-4 text-secondary" />
                 <Loader2 className="h-4 w-4 animate-spin text-gray-500" />
                 <span className="text-sm text-gray-600">
-                  Sedang mengetik...
+                  {isStreaming ? "Memproses..." : "Sedang mengetik..."}
                 </span>
               </div>
             </div>
@@ -194,13 +330,13 @@ const handleSendMessage = async () => {
           onChange={(e) => setInput(e.target.value)}
           onKeyPress={handleKeyPress}
           placeholder="Tanyakan tentang mitigasi kedaruratan..."
-          disabled={isLoading}
+          disabled={isLoading || isStreaming}
           className="flex-grow"
           aria-label="Ketik pertanyaan tentang kedaruratann"
         />
         <Button
           onClick={handleSendMessage}
-          disabled={!input.trim() || isLoading}
+          disabled={!input.trim() || isLoading || isStreaming}
           size="sm"
           className="disaster-button-primary px-3"
           aria-label="Kirim pesan">
