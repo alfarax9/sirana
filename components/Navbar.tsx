@@ -1,10 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { cn } from '@/lib/utils';
+import { AlertTriangle, Menu, X } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Menu, X, Shield, AlertTriangle } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { useState } from 'react';
 
 const navigation = [
   { name: 'Beranda', href: '/' },
@@ -23,16 +24,22 @@ export default function Navbar() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
-            <Link href="/" className="flex items-center space-x-2">
-              <div className="p-2 bg-secondary rounded-lg">
-                <Shield className="h-6 w-6 text-white" />
-              </div>
-              <div className="hidden sm:block">
-                <span className="text-xl font-bold text-dark">SiRANA</span>
-                <p className="text-xs text-gray-600">Siaga - Insan - Rana</p>
-              </div>
-            </Link>
-          </div>
+  <Link href="/" className="flex items-center space-x-2">
+    <div className="relative w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14">
+      <Image
+        src="/logo.svg"
+        alt="logo"
+        fill
+        className="object-contain"
+      />
+    </div>
+
+    <div className="hidden sm:block">
+      <span className="text-xl font-bold text-dark">SiRANA</span>
+      <p className="text-xs text-gray-600">Siaga - Insan - Rana</p>
+    </div>
+  </Link>
+</div>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-1">
