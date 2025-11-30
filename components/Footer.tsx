@@ -14,7 +14,7 @@ export default function Footer() {
               </div>
               <div>
                 <span className="text-xl font-bold">SiCEPAT</span>
-                <p className="text-sm text-gray-300">Siaga - Insan - Rana</p>
+                <p className="text-sm text-gray-300">Siaga Cepat Pertolongan Darurat</p>
               </div>
             </div>
             <p className="text-gray-300 text-sm leading-relaxed">
