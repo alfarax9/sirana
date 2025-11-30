@@ -1,5 +1,5 @@
+import { Mail, MapPin, Phone, Shield } from 'lucide-react';
 import Link from 'next/link';
-import { Shield, Mail, Phone, MapPin } from 'lucide-react';
 
 export default function Footer() {
   return (
@@ -13,7 +13,7 @@ export default function Footer() {
                 <Shield className="h-6 w-6 text-white" />
               </div>
               <div>
-                <span className="text-xl font-bold">SiRANA</span>
+                <span className="text-xl font-bold">SiCEPAT</span>
                 <p className="text-sm text-gray-300">Siaga - Insan - Rana</p>
               </div>
             </div>
@@ -61,7 +61,7 @@ export default function Footer() {
               </div>
               <div className="flex items-center space-x-2 text-gray-300">
                 <Mail className="h-4 w-4" />
-                <span className="text-sm">info@sirana.go.id</span>
+                <span className="text-sm">info@sicepat.go.id</span>
               </div>
               <div className="flex items-center space-x-2 text-gray-300">
                 <MapPin className="h-4 w-4" />
@@ -74,7 +74,7 @@ export default function Footer() {
         <div className="border-t border-gray-700 pt-8 mt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-400 text-sm">
-              © 2024 SiRANA. Dikembangkan untuk keselamatan masyarakat Indonesia.
+              © 2024 SiCEPAT. Dikembangkan untuk keselamatan masyarakat Indonesia.
             </p>
             <div className="flex space-x-6 mt-4 md:mt-0">
               <Link href="#" className="text-gray-400 hover:text-white text-sm transition-colors duration-200">

@@ -35,7 +35,7 @@ export default function Navbar() {
     </div>
 
     <div className="hidden sm:block">
-      <span className="text-xl font-bold text-dark">SiRANA</span>
+      <span className="text-xl font-bold text-dark">SiCEPAT</span>
       <p className="text-xs text-gray-600">Siaga - Insan - Rana</p>
     </div>
   </Link>
