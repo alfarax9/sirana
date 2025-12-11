@@ -221,7 +221,6 @@ export default function EduChatbot({ onLocationDetected }: EduChatbotProps) {
     const jsonResponse = await response.json();
 
     let botReply = "Terima kasih. Laporan Anda sedang diproses.";
-
     if (jsonResponse.status === "success") {
       botReply = jsonResponse.message || "Laporan berhasil diproses.";
 

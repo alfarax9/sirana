@@ -1,18 +1,18 @@
-'use client';
+"use client";
 
-import { cn } from '@/lib/utils';
-import { AlertTriangle, Menu, X } from 'lucide-react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { useState } from 'react';
+import { cn } from "@/lib/utils";
+import { AlertTriangle, Menu, X } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useState } from "react";
 
 const navigation = [
-  { name: 'Beranda', href: '/' },
-  { name: 'Laporan Darurat', href: '/laporan' },
-  { name: 'Edukasi Kedaruratan', href: '/edukasi' },
-  { name: 'Regulasi', href: '/regulasi' },
-  { name: 'Kontak Darurat', href: '/kontak-darurat' },
+  { name: "Beranda", href: "/" },
+  { name: "Laporan Darurat", href: "/laporan" },
+  { name: "Edukasi Kedaruratan", href: "/edukasi" },
+  { name: "Regulasi", href: "/regulasi" },
+  { name: "Kontak Darurat", href: "/kontak-darurat" },
 ];
 
 export default function Navbar() {
@@ -24,22 +24,22 @@ export default function Navbar() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
-  <Link href="/" className="flex items-center space-x-2">
-    <div className="relative w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14">
-      <Image
-        src="/logo.svg"
-        alt="logo"
-        fill
-        className="object-contain"
-      />
-    </div>
+            <Link href="/" className="flex items-center space-x-2">
+              <div className="relative w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14">
+                <Image
+                  src="/logo.svg"
+                  alt="logo"
+                  fill
+                  className="object-contain"
+                />
+              </div>
 
-    <div className="hidden sm:block">
-      <span className="text-xl font-bold text-dark">SiCEPAT</span>
-      <p className="text-xs text-gray-600">Siaga Cepat Pertolongan Darurat</p>
-    </div>
-  </Link>
-</div>
+              <div className="hidden sm:block">
+                <span className="text-xl font-bold text-dark">SiRANA</span>
+                <p className="text-xs text-gray-600">Siaga-insan-rana</p>
+              </div>
+            </Link>
+          </div>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-1">
@@ -50,12 +50,11 @@ export default function Navbar() {
                   key={item.name}
                   href={item.href}
                   className={cn(
-                    'px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200',
+                    "px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200",
                     isActive
-                      ? 'bg-secondary text-white'
-                      : 'text-gray-700 hover:bg-gray-100 hover:text-secondary'
-                  )}
-                >
+                      ? "bg-secondary text-white"
+                      : "text-gray-700 hover:bg-gray-100 hover:text-secondary"
+                  )}>
                   {item.name}
                 </Link>
               );
@@ -66,8 +65,7 @@ export default function Navbar() {
           <div className="hidden md:flex items-center">
             <Link
               href="/kontak-darurat"
-              className="flex items-center space-x-2 bg-error text-white px-4 py-2 rounded-lg hover:bg-error/90 transition-colors duration-200"
-            >
+              className="flex items-center space-x-2 bg-error text-white px-4 py-2 rounded-lg hover:bg-error/90 transition-colors duration-200">
               <AlertTriangle className="h-4 w-4" />
               <span className="text-sm font-medium">Darurat</span>
             </Link>
@@ -78,8 +76,7 @@ export default function Navbar() {
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="p-2 rounded-lg text-gray-700 hover:text-secondary hover:bg-gray-100"
-              aria-label="Toggle navigation"
-            >
+              aria-label="Toggle navigation">
               {mobileMenuOpen ? (
                 <X className="h-6 w-6" />
               ) : (
@@ -101,13 +98,12 @@ export default function Navbar() {
                   key={item.name}
                   href={item.href}
                   className={cn(
-                    'block px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200',
+                    "block px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200",
                     isActive
-                      ? 'bg-secondary text-white'
-                      : 'text-gray-700 hover:bg-gray-100 hover:text-secondary'
+                      ? "bg-secondary text-white"
+                      : "text-gray-700 hover:bg-gray-100 hover:text-secondary"
                   )}
-                  onClick={() => setMobileMenuOpen(false)}
-                >
+                  onClick={() => setMobileMenuOpen(false)}>
                   {item.name}
                 </Link>
               );
@@ -115,8 +111,7 @@ export default function Navbar() {
             <Link
               href="/kontak-darurat"
               className="flex items-center space-x-2 bg-error text-white px-3 py-2 rounded-lg hover:bg-error/90 transition-colors duration-200 mt-3"
-              onClick={() => setMobileMenuOpen(false)}
-            >
+              onClick={() => setMobileMenuOpen(false)}>
               <AlertTriangle className="h-4 w-4" />
               <span className="text-sm font-medium">Kontak Darurat</span>
             </Link>
